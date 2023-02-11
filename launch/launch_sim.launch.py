@@ -41,22 +41,22 @@ def generate_launch_description():
                                    '-entity', 'AGV'],
                         output='screen')
 
-    diff_drive_spawner = Node(
-                        package="controller_manager",
-                        executable="spawner.py",
-                        arguments=["diff_cont"],
-                        )
-    delayed_diff_drive_spawner = RegisterEventHandler(
-    event_handler=OnProcessExit(
-        target_action=spawn_entity,
-        on_exit=[diff_drive_spawner],
-        )
-    )
-    joint_broad_spawner = Node(
-                        package="controller_manager",
-                        executable="spawner.py",
-                        arguments=["joint_broad"],
-                )       
+    # diff_drive_spawner = Node(
+    #                     package="controller_manager",
+    #                     executable="spawner.py",
+    #                     arguments=["diff_cont"],
+    #                     )
+    # delayed_diff_drive_spawner = RegisterEventHandler(
+    # event_handler=OnProcessExit(
+    #     target_action=spawn_entity,
+    #     on_exit=[diff_drive_spawner],
+    #     )
+    # )
+    # joint_broad_spawner = Node(
+    #                     package="controller_manager",
+    #                     executable="spawner.py",
+    #                     arguments=["joint_broad"],
+    #             )       
 
    
 
@@ -67,7 +67,7 @@ def generate_launch_description():
         rsp,
         gazebo,
         spawn_entity,
-        delayed_diff_drive_spawner,
-        joint_broad_spawner,
+        # delayed_diff_drive_spawner,
+        # joint_broad_spawner,
         
     ])

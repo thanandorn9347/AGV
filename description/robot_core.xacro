@@ -129,9 +129,8 @@
             <material name="blue"/>
         </visual>
         <collision>
-            <geometry>
-                <cylinder radius="${wheel_radius}" length="${wheel_thickness}"/>
-
+             <geometry>
+                <sphere radius="${wheel_radius}"/>
             </geometry>
             
         </collision>
@@ -161,8 +160,7 @@
         </visual>
         <collision>
             <geometry>
-                <cylinder radius="${wheel_radius}" length="${wheel_thickness}"/>
-
+                <sphere radius="${wheel_radius}"/>
             </geometry>
            
         </collision>
