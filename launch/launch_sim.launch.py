@@ -32,7 +32,7 @@ def generate_launch_description():
     gazebo = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
                     get_package_share_directory('gazebo_ros'), 'launch', 'gazebo.launch.py')]),
-                    launch_arguments={'extra_gazebo_args': '--ros-args --params-file ' + gazebo_params_file}.items()
+                    launch_arguments={'extra_gazebo_args': '--verbose --ros-args --params-file ' + gazebo_params_file}.items()
              )
 
     twist_mux_params = os.path.join(get_package_share_directory(package_name),'config','twist_mux.yaml')
@@ -42,6 +42,7 @@ def generate_launch_description():
             parameters=[twist_mux_params, {'use_sim_time': True}],
             remappings=[('/cmd_vel_out','/diff_cont/cmd_vel_unstamped')]
         )
+    
     # Run the spawner node from the gazebo_ros package. The entity name doesn't really matter if you only have a single robot.
     spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py',
                         arguments=['-topic', 'robot_description',
@@ -70,7 +71,15 @@ def generate_launch_description():
         on_start=[joint_broad_spawner],
         )
     )
-   
+    robot_localization_params =os.path.join(get_package_share_directory(package_name),'config','ekf.yaml')
+    
+    robot_localization_node = Node(
+       package='robot_localization',
+       executable='ekf_node',
+       name='ekf_filter_node',
+       output='screen',
+       parameters=[os.path.join(robot_localization_params), {'use_sim_time': True}]
+)
 
 
 
@@ -82,5 +91,6 @@ def generate_launch_description():
         delayed_spawn_entity,
         delayed_diff_drive_spawner,
         delayed_joint_broad_spawner,
+        # robot_localization_node,
         
     ])
