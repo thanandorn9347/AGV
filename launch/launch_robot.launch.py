@@ -43,7 +43,25 @@ def generate_launch_description():
             parameters=[twist_mux_params, {'use_sim_time': False}],
             remappings=[('/cmd_vel_out','/diff_cont/cmd_vel_unstamped')]
         )
-    
+    imu_params_config = os.path.join(get_package_share_directory(package_name), 'config', 'imu_params.yaml')   
+    imu_node = Node(
+            package='imu_pkg',
+            executable='imu_node',
+            name='imu_node',
+            parameters = [imu_params_config]
+        )
+    imu_tools_madgwick = Node(
+        package="imu_fusion_madgwick",
+        executable="imu_fusion_madgwick_node",
+        parameters = [imu_params_config]
+    )
+    imu_tools_tf = Node(
+        package="imu_tf",
+        executable="transform",
+        parameters=[{
+          'source_frame': 'imu_frame',
+          'target_frame': 'chassis',
+    }])
     robot_localization_params =os.path.join(get_package_share_directory(package_name),'config','ekf.yaml')
     
     robot_localization_node = Node(
@@ -115,6 +133,9 @@ def generate_launch_description():
     return LaunchDescription([
         rsp,
         twist_mux,
+        imu_node,
+        imu_tools_madgwick,
+        # imu_tools_tf,
         delayed_controller_manager,
         delayed_diff_drive_spawner,
         delayed_joint_broad_spawner,
