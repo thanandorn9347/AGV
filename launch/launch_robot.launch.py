@@ -62,6 +62,11 @@ def generate_launch_description():
           'source_frame': 'imu_frame',
           'target_frame': 'chassis',
     }])
+    range_sensor = Node(
+        package="vl53l0x",
+        executable="vl53l0x",
+        parameters=[]
+    )
     robot_localization_params =os.path.join(get_package_share_directory(package_name),'config','ekf.yaml')
     
     robot_localization_node = Node(
@@ -82,7 +87,7 @@ def generate_launch_description():
                     controller_params_file]
     )
    
-    delayed_controller_manager = TimerAction(period=3.0, actions=[controller_manager])
+    delayed_controller_manager = TimerAction(period=5.0, actions=[controller_manager])
 
     diff_drive_spawner = Node(
         package="controller_manager",
@@ -136,6 +141,7 @@ def generate_launch_description():
         imu_node,
         imu_tools_madgwick,
         # imu_tools_tf,
+        range_sensor,
         delayed_controller_manager,
         delayed_diff_drive_spawner,
         delayed_joint_broad_spawner,
